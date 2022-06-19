@@ -12,6 +12,8 @@ public class Principal extends javax.swing.JFrame {
     public Principal() {
         initComponents();
         cargarHora();
+        this.setLocationRelativeTo(null);
+        cargarNombre();
     }
 
     @SuppressWarnings("unchecked")
@@ -228,5 +230,9 @@ public class Principal extends javax.swing.JFrame {
 //        if (jlbl_Hora <) {
 //            
 //        }
+    }
+
+    private void cargarNombre() {
+        
     }
 }
