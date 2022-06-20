@@ -11,11 +11,12 @@ import javax.swing.table.DefaultTableModel;
 
 public class InicioSesion extends javax.swing.JFrame {
     DefaultTableModel modelo = new DefaultTableModel();
+
     public InicioSesion() {
         initComponents();
         jbtn_Tapar.setVisible(false);
         this.setLocationRelativeTo(null);
-        
+        unlogUsuario();
     }
 
     @SuppressWarnings("unchecked")
@@ -117,6 +118,7 @@ public class InicioSesion extends javax.swing.JFrame {
 
     private void jbtn_AccederActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtn_AccederActionPerformed
         if(comprobarDatos()){
+            logearUsuario();
             Principal pp = new Principal();
             pp.show();
             this.dispose();
@@ -255,7 +257,29 @@ public class InicioSesion extends javax.swing.JFrame {
     }
 
     private void unlogUsuario() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            conexion cc = new conexion();
+            Connection cn = cc.conectar();
+            String sql = "";
+            sql = "UPDATE usuarios SET estado_user = '0' WHERE estado_user = '1'";
+            PreparedStatement psd = cn.prepareStatement(sql);
+            psd.executeUpdate();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+    }
+
+    private void logearUsuario() {
+        try {
+            conexion cc = new conexion();
+            Connection cn = cc.conectar();
+            String sql = "";
+            sql = "UPDATE usuarios SET estado_user = '1' WHERE usuario_reg = '"+jtxt_Usuario.getText()+"'";
+            PreparedStatement psd = cn.prepareStatement(sql);
+            psd.executeUpdate();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
     }
 }
 
