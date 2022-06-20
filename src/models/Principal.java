@@ -10,7 +10,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
 
 public class Principal extends javax.swing.JFrame {
     
@@ -73,51 +79,56 @@ public class Principal extends javax.swing.JFrame {
 
         jButton2.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
         jButton2.setText("Reporte Asistencia");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(72, 72, 72)
-                .addComponent(jlbl_Reloj)
-                .addGap(28, 28, 28)
-                .addComponent(jlbl_Hora)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jlbl_Minuto)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jlbl_Segundo)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton2))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(31, 31, 31)
-                                .addComponent(jlbl_Usuario)
-                                .addGap(223, 223, 223)
-                                .addComponent(jLabel2))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(172, 172, 172)
-                                .addComponent(jButton1)))
-                        .addGap(0, 10, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton2)))
+                                .addComponent(jButton1))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(72, 72, 72)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jlbl_Usuario)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jlbl_Reloj)
+                                        .addGap(28, 28, 28)
+                                        .addComponent(jlbl_Hora)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jLabel3)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jlbl_Minuto)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jLabel4)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jlbl_Segundo))))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(196, 196, 196)
+                                .addComponent(jLabel2)))
+                        .addGap(0, 96, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jlbl_Usuario)
-                    .addComponent(jLabel2))
-                .addGap(102, 102, 102)
+                .addGap(22, 22, 22)
+                .addComponent(jLabel2)
+                .addGap(50, 50, 50)
+                .addComponent(jlbl_Usuario)
+                .addGap(31, 31, 31)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jlbl_Reloj)
                     .addComponent(jlbl_Hora)
@@ -152,6 +163,11 @@ public class Principal extends javax.swing.JFrame {
         controlarAtraso();
         
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        reporte();
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     public static void main(String args[]) {
 
@@ -253,5 +269,29 @@ public class Principal extends javax.swing.JFrame {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, ex);
         }
+    }
+    
+        private void reporte(){
+        try {
+            conexion c = new conexion();
+            
+            String arch = System.getProperty("user.dir") + "/src/reporte/reporteCV.jrxml";
+            
+            JasperReport reporte = JasperCompileManager.compileReport(arch);
+
+            JasperPrint print = JasperFillManager.fillReport(reporte, null, c.conectar());
+            
+            JFrame frame = new JFrame();
+            frame.getContentPane().add(new MiJRViewer(print));
+            frame.pack();
+            frame.setResizable(false);
+            frame.setSize(900, 350);
+            frame.setLocationRelativeTo(null);
+            frame.setTitle("Registros");
+            frame.setVisible(true);
+        } catch (JRException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+    
     }
 }
