@@ -5,7 +5,12 @@
  */
 package models;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Date;
+import javax.swing.JOptionPane;
 
 public class Principal extends javax.swing.JFrame {
     
@@ -233,6 +238,20 @@ public class Principal extends javax.swing.JFrame {
     }
 
     private void cargarNombre() {
-        
+        try {
+            conexion cc = new conexion();
+            Connection cn = cc.conectar();
+            String sql = "";
+            sql = "select nombre_user, apellido_user FROM usuarios WHERE estado_user = '1'";
+            PreparedStatement psd = cn.prepareStatement(sql);
+            ResultSet rs = psd.executeQuery();
+            if (rs.next()) {
+                String nom = rs.getString("nombre_user");
+                String ape = rs.getString("apellido_user");
+                jlbl_Usuario.setText("Bienvenido, "+nom+" "+ape);
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
     }
 }
