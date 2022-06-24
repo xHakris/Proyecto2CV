@@ -29,31 +29,22 @@ public class InicioSesion extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jtxt_Usuario = new javax.swing.JTextField();
         jbtn_Acceder = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
-        jlbl_Aqui = new javax.swing.JLabel();
-        jbtn_AccesoBiometrico = new javax.swing.JButton();
         jpsw_Contrasenia = new javax.swing.JPasswordField();
         jbtn_Ver = new javax.swing.JButton();
         jbtn_Tapar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
         jLabel1.setFont(new java.awt.Font("SansSerif", 0, 24)); // NOI18N
         jLabel1.setText("Inicio de Sesion");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 40, -1, -1));
 
         jLabel2.setFont(new java.awt.Font("SansSerif", 0, 24)); // NOI18N
         jLabel2.setText("Usuario");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 121, -1, -1));
 
         jLabel3.setFont(new java.awt.Font("SansSerif", 0, 24)); // NOI18N
         jLabel3.setText("Contraseña");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(27, 177, -1, -1));
 
         jtxt_Usuario.setFont(new java.awt.Font("SansSerif", 0, 24)); // NOI18N
-        jPanel1.add(jtxt_Usuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(169, 118, 300, -1));
 
         jbtn_Acceder.setFont(new java.awt.Font("SansSerif", 0, 24)); // NOI18N
         jbtn_Acceder.setText("Acceder");
@@ -62,29 +53,8 @@ public class InicioSesion extends javax.swing.JFrame {
                 jbtn_AccederActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtn_Acceder, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 260, -1, -1));
-
-        jLabel4.setFont(new java.awt.Font("SansSerif", 0, 24)); // NOI18N
-        jLabel4.setText("No tienes cuenta? Crea una");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 340, -1, -1));
-
-        jlbl_Aqui.setFont(new java.awt.Font("SansSerif", 0, 24)); // NOI18N
-        jlbl_Aqui.setForeground(new java.awt.Color(51, 102, 255));
-        jlbl_Aqui.setText("aquí");
-        jlbl_Aqui.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jlbl_AquiMouseClicked(evt);
-            }
-        });
-        jPanel1.add(jlbl_Aqui, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 340, -1, -1));
-
-        jbtn_AccesoBiometrico.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jbtn_AccesoBiometrico.setText("Acceso Biometrico");
-        jbtn_AccesoBiometrico.setEnabled(false);
-        jPanel1.add(jbtn_AccesoBiometrico, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 260, -1, 40));
 
         jpsw_Contrasenia.setFont(new java.awt.Font("SansSerif", 0, 24)); // NOI18N
-        jPanel1.add(jpsw_Contrasenia, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 180, 300, -1));
 
         jbtn_Ver.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jbtn_Ver.addActionListener(new java.awt.event.ActionListener() {
@@ -92,7 +62,6 @@ public class InicioSesion extends javax.swing.JFrame {
                 jbtn_VerActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtn_Ver, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 180, 40, 40));
 
         jbtn_Tapar.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jbtn_Tapar.addActionListener(new java.awt.event.ActionListener() {
@@ -100,17 +69,70 @@ public class InicioSesion extends javax.swing.JFrame {
                 jbtn_TaparActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtn_Tapar, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 180, 40, 40));
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(69, 69, 69)
+                        .addComponent(jLabel2)
+                        .addGap(18, 18, 18)
+                        .addComponent(jtxt_Usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(27, 27, 27)
+                        .addComponent(jLabel3)
+                        .addGap(19, 19, 19)
+                        .addComponent(jpsw_Contrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jbtn_Ver, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jbtn_Tapar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(188, 188, 188)
+                        .addComponent(jbtn_Acceder, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(24, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(185, 185, 185))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(39, 39, 39)
+                .addComponent(jLabel1)
+                .addGap(47, 47, 47)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(3, 3, 3)
+                        .addComponent(jLabel2))
+                    .addComponent(jtxt_Usuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(21, 21, 21)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(3, 3, 3)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jpsw_Contrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jbtn_Ver, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jbtn_Tapar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
+                .addComponent(jbtn_Acceder)
+                .addGap(55, 55, 55))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 542, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -118,18 +140,19 @@ public class InicioSesion extends javax.swing.JFrame {
 
     private void jbtn_AccederActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtn_AccederActionPerformed
         if(comprobarDatos()){
-            logearUsuario();
-            Principal pp = new Principal();
-            pp.show();
-            this.dispose();
+            if (comprobarAdmin()==true) {
+                this.dispose();
+                MenuAdmin ma = new MenuAdmin();
+                ma.show();
+            }else{
+                logearUsuario();
+                Principal pp = new Principal();
+                pp.show();
+                this.dispose();
+            }
         }
+        
     }//GEN-LAST:event_jbtn_AccederActionPerformed
-
-    private void jlbl_AquiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jlbl_AquiMouseClicked
-        CrearCuenta cc = new CrearCuenta();
-        cc.show();
-        this.dispose();
-    }//GEN-LAST:event_jlbl_AquiMouseClicked
 
     private void jbtn_VerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtn_VerActionPerformed
         jpsw_Contrasenia.setEchoChar((char) 0);
@@ -184,13 +207,10 @@ public class InicioSesion extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JButton jbtn_Acceder;
-    private javax.swing.JButton jbtn_AccesoBiometrico;
     private javax.swing.JButton jbtn_Tapar;
     private javax.swing.JButton jbtn_Ver;
-    private javax.swing.JLabel jlbl_Aqui;
     private javax.swing.JPasswordField jpsw_Contrasenia;
     private javax.swing.JTextField jtxt_Usuario;
     // End of variables declaration//GEN-END:variables
@@ -279,6 +299,26 @@ public class InicioSesion extends javax.swing.JFrame {
             psd.executeUpdate();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, ex);
+        }
+    }
+    
+    private boolean comprobarAdmin() {
+        try {
+            conexion cc = new conexion();
+            Connection cn = cc.conectar();
+            String sql = "";
+            sql = "select tipo_user FROM usuarios WHERE usuario_reg = '"+jtxt_Usuario.getText()+"'";
+            PreparedStatement psd = cn.prepareStatement(sql);
+            ResultSet rs = psd.executeQuery();
+            if (rs.next()) {
+                if (rs.getString("tipo_user").equals("A")) {
+                    return true;
+                }
+            }
+            return false;
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+            return false;
         }
     }
 }
