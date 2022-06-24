@@ -230,15 +230,7 @@ public class CrearCuenta extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void verificarcontra() {
-        if (jpswVerificarclave.getText().equals(jpswclave.getText())) {
-            //CONTRASEÑA CORRECTA
-            registrousuario();
-        } else {
-            JOptionPane.showMessageDialog(null, "Las contraseñas no coinciden");
-            jpswVerificarclave.setText("");
-            jpswclave.setText("");
-            jpswclave.requestFocus();
-        }
+        registrousuario();
     }
 
     private void cancelarusuario() {
@@ -253,7 +245,6 @@ public class CrearCuenta extends javax.swing.JFrame {
         jtxtNombre.setText("");
         jtxtApellido.setText("");
         jpswclave.setText("");
-        jpswVerificarclave.setText("");
     }
 
     private boolean registrousuario() {
