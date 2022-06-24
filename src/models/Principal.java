@@ -325,7 +325,12 @@ public class Principal extends javax.swing.JFrame {
     }
 
     private void insertarRegistro() {
-        String tipo = conseguirHorario("tipo","maniana");
+        String tipo = "";
+        if (Integer.valueOf(jlbl_Hora.getText()) <= 13) {
+            tipo = conseguirHorario("tipo","maniana");
+        } else {
+            tipo = conseguirHorario("tipo","tarde");
+        }
         try {
             String sql = "INSERT INTO registros VALUES(?,?,?,?,?,?)";
             PreparedStatement psd = cn.prepareStatement(sql);
@@ -345,14 +350,10 @@ public class Principal extends javax.swing.JFrame {
         
     }
 
-    private void iniciarBoton() {
-        
-    }
-
     private String conseguirHorario(String tipo, String horario) {
         
         try {
-            String sql = "select "+tipo+"_hor FROM horarios WHERE usuario_hor = '"+usuario+"' and tipo_hor = '"+horario+"'";
+            String sql = "select "+tipo+"_hor FROM horarios WHERE usuario_hor = '"+usuario+"' AND tipo_hor = '"+horario+"'";
             PreparedStatement psd = cn.prepareStatement(sql);
             ResultSet rs = psd.executeQuery();
             if (rs.next()) {
