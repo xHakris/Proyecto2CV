@@ -147,6 +147,7 @@ public class InicioSesion extends javax.swing.JFrame {
             }else{
                 logearUsuario();
                 Principal pp = new Principal();
+                pp.activadorBoton();
                 pp.show();
                 this.dispose();
             }
