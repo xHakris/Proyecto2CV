@@ -142,8 +142,8 @@ public class InicioSesion extends javax.swing.JFrame {
         if(comprobarDatos()){
             if (comprobarAdmin()==true) {
                 this.dispose();
-                MenuAdmin ma = new MenuAdmin();
-                ma.show();
+             //   MenuAdmin ma = new MenuAdmin();
+             //   ma.show();
             }else{
                 logearUsuario();
                 Principal pp = new Principal();
