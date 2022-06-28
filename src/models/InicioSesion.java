@@ -16,7 +16,7 @@ public class InicioSesion extends javax.swing.JFrame {
         initComponents();
         jbtn_Tapar.setVisible(false);
         this.setLocationRelativeTo(null);
-        unlogUsuario();
+       // unlogUsuario();
     }
 
     @SuppressWarnings("unchecked")
