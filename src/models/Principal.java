@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.util.Date;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -22,13 +23,21 @@ public class Principal extends javax.swing.JFrame {
     conexion cc = new conexion();
     Connection cn = cc.conectar();
     String usuario = "";
+    private DefaultTableModel tablaRegistros,tablaHorarios;
 
     public Principal() {
         initComponents();
         cargarHora();
         this.setLocationRelativeTo(null);
         cargarNombre();
-        cargarTablaAsistencias();
+        String horarios[] = {"Usuario","Nombre","Hora Inicio Jornada","Hora Fin Jornada","Tipo Jornada"};
+        String registros[] = {"Usuario","Nombre","Hora del Registro","Fecha","Tipo Registro"};
+        tablaRegistros = new DefaultTableModel(null, registros);
+        tablaHorarios = new DefaultTableModel(null, horarios);
+        jtbl_Registros.setModel(tablaRegistros);
+        jtbl_Horarios.setModel(tablaHorarios);
+        cargarTablaHorario();
+        cargarTablaRegistro();
     }
 
     @SuppressWarnings("unchecked")
@@ -46,6 +55,11 @@ public class Principal extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jtbl_Horarios = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jtbl_Registros = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -74,7 +88,7 @@ public class Principal extends javax.swing.JFrame {
         });
 
         jlbl_Horario.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
-        jlbl_Horario.setText("Horario de la Mañana");
+        jlbl_Horario.setText("horario de la Mañana");
 
         jLabel3.setFont(new java.awt.Font("SansSerif", 0, 36)); // NOI18N
         jLabel3.setText(":");
@@ -90,24 +104,52 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setText("Bienvenido al");
+
+        jtbl_Horarios.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane1.setViewportView(jtbl_Horarios);
+
+        jtbl_Registros.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane2.setViewportView(jtbl_Registros);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton2)
-                .addGap(22, 22, 22))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(72, 72, 72)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jlbl_Usuario)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jlbl_Reloj)
-                                .addGap(28, 28, 28)
-                                .addComponent(jlbl_Hora)
+                                .addGap(166, 166, 166)
+                                .addComponent(jLabel1)
+                                .addGap(18, 18, 18)
+                                .addComponent(jlbl_Horario))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(25, 25, 25)
+                                .addComponent(jlbl_Usuario))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(189, 189, 189)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jbtn_registrar)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jlbl_Reloj)
+                                        .addGap(28, 28, 28)
+                                        .addComponent(jlbl_Hora)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jLabel3)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -115,23 +157,31 @@ public class Principal extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jLabel4)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jlbl_Segundo))))
+                                .addComponent(jlbl_Segundo)))
+                        .addGap(0, 104, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(196, 196, 196)
-                        .addComponent(jlbl_Horario))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(170, 170, 170)
-                        .addComponent(jbtn_registrar)))
-                .addContainerGap(79, Short.MAX_VALUE))
+                        .addGap(19, 19, 19)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jButton2))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 663, Short.MAX_VALUE)
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING))
+                                .addGap(0, 0, Short.MAX_VALUE)))))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addComponent(jlbl_Horario)
-                .addGap(50, 50, 50)
+                .addGap(23, 23, 23)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jlbl_Horario)
+                    .addComponent(jLabel1))
+                .addGap(49, 49, 49)
                 .addComponent(jlbl_Usuario)
-                .addGap(31, 31, 31)
+                .addGap(8, 8, 8)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jlbl_Reloj)
                     .addComponent(jlbl_Hora)
@@ -139,9 +189,13 @@ public class Principal extends javax.swing.JFrame {
                     .addComponent(jlbl_Minuto)
                     .addComponent(jLabel4)
                     .addComponent(jlbl_Segundo))
-                .addGap(27, 27, 27)
+                .addGap(18, 18, 18)
                 .addComponent(jbtn_registrar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 78, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(34, 34, 34)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -164,7 +218,6 @@ public class Principal extends javax.swing.JFrame {
 
     private void jbtn_registrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtn_registrarActionPerformed
         insertarRegistro();
-        cargarTablaAsistencias();
         
     }//GEN-LAST:event_jbtn_registrarActionPerformed
 
@@ -202,9 +255,12 @@ public class Principal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton2;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton jbtn_registrar;
     private javax.swing.JLabel jlbl_Hora;
     private javax.swing.JLabel jlbl_Horario;
@@ -212,6 +268,8 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JLabel jlbl_Reloj;
     private javax.swing.JLabel jlbl_Segundo;
     private javax.swing.JLabel jlbl_Usuario;
+    private javax.swing.JTable jtbl_Horarios;
+    private javax.swing.JTable jtbl_Registros;
     // End of variables declaration//GEN-END:variables
 
     private void cargarHora() {
@@ -365,7 +423,72 @@ public class Principal extends javax.swing.JFrame {
         return "";
     }
 
-    private void cargarTablaAsistencias() {
-        
+    private void cargarTablaHorario() {
+        String nombre, apellido, horaI, horaF, tipo;
+        try{
+            String sql = "SELECT a.nombre_user, a.apellido_user, b.inicio_hor, b.fin_hor, b.tipo_hor FROM usuarios as a, horarios as b WHERE a.usuario_reg='"+usuario+"' ";
+            PreparedStatement ps = cn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                nombre = rs.getString("nombre_user");
+                apellido = rs.getString("apellido_user");
+                horaI = rs.getString("inicio_hor");
+                horaF = rs.getString("fin_hor");
+                tipo = rs.getString("tipo_hor");
+                
+                String dato[] = new String[5];
+                
+                dato[0] = usuario;
+                dato[1] = nombre+" "+apellido;
+                dato[2] = horaI+":00";
+                dato[3] = horaF+":00";
+                if (tipo.equals("maniana")) {
+                    dato[4] = "Mañana";
+                } else if(tipo.equals("tarde")){
+                    dato[4] = "Tarde";
+                }
+                tablaHorarios.addRow(dato);
+            }
+        }
+        catch(SQLException ex){
+            System.out.println(ex);
+        }
+    }
+    
+    private void cargarTablaRegistro() {
+        String nombre, apellido, hora, min, seg, fecha, tipo;
+        try{
+            String sql = "SELECT a.nombre_user, a.apellido_user, b.hora_reg, b.minuto_reg, b.segundo_reg, b.fecha_reg, b.tipo_reg FROM usuarios as a, registros as b WHERE a.usuario_reg='"+usuario+"'";
+            PreparedStatement ps = cn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                nombre = rs.getString("nombre_user");
+                apellido = rs.getString("apellido_user");
+                hora = rs.getString("hora_reg");
+                min = rs.getString("minuto_reg");
+                seg = rs.getString("segundo_reg");
+                fecha = rs.getString("fecha_reg");
+                tipo = rs.getString("tipo_reg");
+                
+                
+                String dato[] = new String[6];
+                
+                dato[0] = usuario;
+                dato[1] = nombre+" "+apellido;
+                dato[2] = hora+":"+min+":"+seg;
+                dato[3] = fecha;
+                if (tipo.equals("maniana")) {
+                    dato[4] = "Entrada";
+                } else if(tipo.equals("tarde")){
+                    dato[4] = "Salida";
+                }
+                tablaRegistros.addRow(dato);
+            }
+        }
+        catch(SQLException ex){
+            System.out.println(ex);
+        }
     }
 }
