@@ -105,14 +105,14 @@
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                       <Component id="jtxtCedula" pref="93" max="32767" attributes="0"/>
-                                      <Component id="jtxtNombre" max="32767" attributes="0"/>
-                                      <Component id="jtxtApellido" max="32767" attributes="0"/>
                                       <Component id="jpwdContraena" max="32767" attributes="0"/>
+                                      <Component id="jtxtApellido" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="jtxtNombre" alignment="0" max="32767" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                  <EmptySpace min="0" pref="95" max="32767" attributes="0"/>
                                   <Component id="jbtnRegistrar" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                   <Component id="jbtnCancelar" min="-2" max="-2" attributes="0"/>
@@ -131,9 +131,9 @@
                               <Component id="jtxtCedula" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jtxtNombre" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
+                              <Component id="jtxtNombre" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
@@ -178,10 +178,6 @@
                 </Component>
                 <Component class="javax.swing.JTextField" name="jtxtCedula">
                 </Component>
-                <Component class="admin.TxtString" name="jtxtNombre">
-                </Component>
-                <Component class="admin.TxtString" name="jtxtApellido">
-                </Component>
                 <Component class="javax.swing.JPasswordField" name="jpwdContraena">
                 </Component>
                 <Component class="javax.swing.JButton" name="jbtnRegistrar">
@@ -199,6 +195,10 @@
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jbtnCancelarActionPerformed"/>
                   </Events>
+                </Component>
+                <Component class="javax.swing.JTextField" name="jtxtNombre">
+                </Component>
+                <Component class="javax.swing.JTextField" name="jtxtApellido">
                 </Component>
               </SubComponents>
             </Container>
