@@ -1,22 +1,20 @@
 
 package models;
 
+import admin.AdminPrincipal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 
 public class InicioSesion extends javax.swing.JFrame {
-    DefaultTableModel modelo = new DefaultTableModel();
 
     public InicioSesion() {
         initComponents();
         jbtn_Tapar.setVisible(false);
         this.setLocationRelativeTo(null);
-       // unlogUsuario();
+        //unlogUsuario();
     }
 
     @SuppressWarnings("unchecked")
@@ -142,8 +140,8 @@ public class InicioSesion extends javax.swing.JFrame {
         if(comprobarDatos()){
             if (comprobarAdmin()==true) {
                 this.dispose();
-             //   MenuAdmin ma = new MenuAdmin();
-             //   ma.show();
+                AdminPrincipal ma = new AdminPrincipal();
+                ma.show();
             }else{
                 logearUsuario();
                 Principal pp = new Principal();
@@ -152,7 +150,6 @@ public class InicioSesion extends javax.swing.JFrame {
                 this.dispose();
             }
         }
-        
     }//GEN-LAST:event_jbtn_AccederActionPerformed
 
     private void jbtn_VerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtn_VerActionPerformed
@@ -216,30 +213,6 @@ public class InicioSesion extends javax.swing.JFrame {
     private javax.swing.JTextField jtxt_Usuario;
     // End of variables declaration//GEN-END:variables
 
-    private void cargarTabla() {
-        try {
-            String[] titulos = {"Usuario", "Nombre", "apellido"};
-            String[] registros = new String[3];
-            modelo = new DefaultTableModel(null, titulos);
-            conexion cc = new conexion();
-            Connection cn = cc.conectar();
-            String sql = "";
-            sql = "select * from usuarios";
-            Statement psd = cn.createStatement();
-            ResultSet rs = psd.executeQuery(sql);
-            while (rs.next()) {
-
-                registros[0] = rs.getString("usuario_reg");
-                registros[1] = rs.getString("nombre_user");
-                registros[2] = rs.getString("apellido_user");
-                modelo.addRow(registros);
-            }
-            //jTable1.setModel(modelo);
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex);
-        }
-    }
-
     private boolean comprobarDatos() {
         if (jtxt_Usuario.getText().isEmpty() || jtxt_Usuario.getText() == "") {
             JOptionPane.showMessageDialog(null, "Ingrese un nombre de usuario");
@@ -275,19 +248,6 @@ public class InicioSesion extends javax.swing.JFrame {
 
         }
         return false;
-    }
-
-    private void unlogUsuario() {
-        try {
-            conexion cc = new conexion();
-            Connection cn = cc.conectar();
-            String sql = "";
-            sql = "UPDATE usuarios SET estado_user = '0' WHERE estado_user = '1'";
-            PreparedStatement psd = cn.prepareStatement(sql);
-            psd.executeUpdate();
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex);
-        }
     }
 
     private void logearUsuario() {
