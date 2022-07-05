@@ -5,11 +5,14 @@
  */
 package admin;
 
+import java.awt.Toolkit;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerListModel;
 import models.InicioSesion;
 import models.conexion;
 
@@ -20,11 +23,13 @@ import models.conexion;
 public class AdminPrincipal extends javax.swing.JFrame {
 
     DefaultComboBoxModel modeloJornada;
+    SpinnerListModel modeloSpinner;
 
     public AdminPrincipal() {
         initComponents();
         this.setLocationRelativeTo(null);
         cargaJornada();
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/logo.png")));
     }
 
     private void registrarDocente() {
@@ -37,13 +42,14 @@ public class AdminPrincipal extends javax.swing.JFrame {
             nombre_user = jtxtNombre.getText();
             apellido_user = jtxtApellido.getText();
             estado_user = "0";
-            String sql = "INSERT INTO USUARIOS(usuario_reg,contrasena_reg,nombre_user,apellido_user,estado_user) VALUES(?,?,?,?,?)";
+            String sql = "INSERT INTO usuarios(usuario_reg,contrasena_reg,nombre_user,apellido_user,estado_user,tipo_user) VALUES(?,?,?,?,?,?)";
             PreparedStatement psd = cc.prepareStatement(sql);
             psd.setString(1, usuario_reg);
             psd.setString(2, contrasena_reg);
             psd.setString(3, nombre_user);
             psd.setString(4, apellido_user);
             psd.setString(5, estado_user);
+            psd.setString(6, "U");
             int n = psd.executeUpdate();
             if (n > 0) {
                 JOptionPane.showMessageDialog(null, "SE HA REGISTRADO DE MANERA EXITOSA ");
@@ -129,13 +135,11 @@ public class AdminPrincipal extends javax.swing.JFrame {
 
     private void registro() {
         if (controlDatosVacios()) {
-            if (validar(this.jtxtCedula.getText())) {
-                if (controlTamanoDatos()) {
-                    registrarDocente();
-                }
-            } else {
-                JOptionPane.showMessageDialog(null, "cedula incorrecta");
+            
+            if (controlTamanoDatos()) {
+                registrarDocente();
             }
+            
         }
     }
 
@@ -152,14 +156,24 @@ public class AdminPrincipal extends javax.swing.JFrame {
         try {
             conexion cn = new conexion();
             Connection cc = cn.conectar();
-
-            String sqlUpdate;
-            sqlUpdate = "UPDATE USUARIOS SET ********* = '" + this.modeloJornada.getElementAt(this.jcbxJornada.getSelectedIndex()).toString()
-                    + "' WHERE usuario_reg = '" + this.jtxtCedulaHorario.getText() + "'";
-            PreparedStatement psd = cc.prepareStatement(sqlUpdate);
+            String tipo = this.modeloJornada.getElementAt(this.jcbxJornada.getSelectedIndex()).toString();
+            if (tipo.equals("Mañana")) {
+                tipo = "maniana";
+            }else{
+                tipo = "tarde";
+            }
+            
+            String sql;
+            sql = "INSERT INTO horarios(tipo_hor,inicio_hor,fin_hor,usuario_hor) VALUES ("
+                    + "'"+tipo+"',"
+                    + "'"+this.jspnIni.getValue().toString()+"',"
+                    + "'"+this.jspnFin.getValue().toString()+"',"
+                    + "'"+this.jtxtCedulaHorario.getText()+"')";
+            
+            PreparedStatement psd = cc.prepareStatement(sql);
             int n = psd.executeUpdate();
             if (n > 0) {
-                JOptionPane.showMessageDialog(null, "SE HA ACTUALIZADO DE MANERA EXITOSA ");
+                JOptionPane.showMessageDialog(null, "SE HA REGISTRO DE MANERA EXITOSA ");
                 this.jtxtCedulaHorario.setText("");
                 this.jcbxJornada.setSelectedIndex(0);
             }
@@ -169,25 +183,38 @@ public class AdminPrincipal extends javax.swing.JFrame {
     }
 
     private void registroHorario() {
-        if (validar(this.jtxtCedulaHorario.getText())) {
+        
             if (this.jcbxJornada.getSelectedIndex() != 0) {
                 registrarHorario();
             } else {
                 JOptionPane.showMessageDialog(null, "Selecciones una jornada");
             }
-        } else {
-            JOptionPane.showMessageDialog(null, "cedula incorrecta");
-        }
+        
     }
 
     private void vistaHorario() {
         if (jcbxJornada.getSelectedIndex() == 1) {
-            jlblHoras.setText("08:00 - 13:00");
+            jlblHoras.setText("07:00 - 13:00");
+            cargarSpinner(7,7, jspnIni);
+            cargarSpinner(7,7, jspnFin);
         } else if (jcbxJornada.getSelectedIndex() == 2) {
             jlblHoras.setText("14:00 - 20:00");
+            cargarSpinner(14,7, jspnIni);
+            cargarSpinner(14,7, jspnFin);
         } else {
             jlblHoras.setText("");
         }
+    }
+    
+        private void cargarSpinner(int ini, int fin, JSpinner spn) {
+        String[] cantidad = new String[fin];
+        Integer x = ini;
+        for (int i = 0; i < fin; i++) {
+            cantidad[i] = x.toString();
+            x += 1;
+        }
+        modeloSpinner = new SpinnerListModel(cantidad);
+        spn.setModel(modeloSpinner);
     }
 
     /**
@@ -207,11 +234,11 @@ public class AdminPrincipal extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jtxtCedula = new javax.swing.JTextField();
+        jtxtNombre = new admin.TxtString();
+        jtxtApellido = new admin.TxtString();
         jpwdContraena = new javax.swing.JPasswordField();
         jbtnRegistrar = new javax.swing.JButton();
         jbtnCancelar = new javax.swing.JButton();
-        jtxtNombre = new javax.swing.JTextField();
-        jtxtApellido = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
@@ -221,88 +248,75 @@ public class AdminPrincipal extends javax.swing.JFrame {
         jtxtCedulaHorario = new javax.swing.JTextField();
         jcbxJornada = new javax.swing.JComboBox<>();
         jlblHoras = new javax.swing.JLabel();
+        jspnIni = new javax.swing.JSpinner();
+        jspnFin = new javax.swing.JSpinner();
+        jLabel8 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jTabbedPane1.setForeground(new java.awt.Color(153, 0, 0));
+        jTabbedPane1.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+
         jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        jLabel1.setText("Cedula:");
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jLabel1.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 51, 102));
+        jLabel1.setText("Usuario:");
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 30, -1, -1));
+
+        jLabel4.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(0, 51, 102));
         jLabel4.setText("Contraseña:");
+        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 180, -1, -1));
 
+        jLabel2.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(0, 51, 102));
         jLabel2.setText("Nombre:");
+        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 80, -1, -1));
 
+        jLabel3.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(0, 51, 102));
         jLabel3.setText("Apellido:");
+        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 130, -1, -1));
 
+        jtxtCedula.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jtxtCedula.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jPanel2.add(jtxtCedula, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 30, 270, -1));
+
+        jtxtNombre.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jtxtNombre.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jPanel2.add(jtxtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 80, 270, -1));
+
+        jtxtApellido.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jtxtApellido.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jPanel2.add(jtxtApellido, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 130, 270, -1));
+
+        jpwdContraena.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jpwdContraena.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jPanel2.add(jpwdContraena, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 180, 270, -1));
+
+        jbtnRegistrar.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jbtnRegistrar.setText("Registrar");
         jbtnRegistrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnRegistrarActionPerformed(evt);
             }
         });
+        jPanel2.add(jbtnRegistrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 240, 120, -1));
 
+        jbtnCancelar.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jbtnCancelar.setText("Cancelar");
         jbtnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnCancelarActionPerformed(evt);
             }
         });
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jtxtCedula, javax.swing.GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE)
-                            .addComponent(jpwdContraena)
-                            .addComponent(jtxtApellido)
-                            .addComponent(jtxtNombre))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(0, 95, Short.MAX_VALUE)
-                        .addComponent(jbtnRegistrar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jbtnCancelar)))
-                .addContainerGap())
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jtxtCedula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jtxtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jtxtApellido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jpwdContraena, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jbtnRegistrar)
-                    .addComponent(jbtnCancelar))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        jPanel2.add(jbtnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(305, 240, 120, -1));
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -317,83 +331,68 @@ public class AdminPrincipal extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jTabbedPane1.addTab("Registrar Docente", jPanel3);
 
         jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel5.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(0, 51, 102));
         jLabel5.setText("Jornada:");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(76, 110, -1, -1));
 
-        jLabel6.setText("Cedula: ");
+        jLabel6.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(0, 51, 102));
+        jLabel6.setText("Usuario:");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(76, 51, -1, -1));
 
+        jbtnAnadir.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jbtnAnadir.setText("Añadir");
         jbtnAnadir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnAnadirActionPerformed(evt);
             }
         });
+        jPanel1.add(jbtnAnadir, new org.netbeans.lib.awtextra.AbsoluteConstraints(172, 241, 126, -1));
 
+        jbtnCancelarHorario.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jbtnCancelarHorario.setText("Cancelar");
         jbtnCancelarHorario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnCancelarHorarioActionPerformed(evt);
             }
         });
+        jPanel1.add(jbtnCancelarHorario, new org.netbeans.lib.awtextra.AbsoluteConstraints(327, 241, 126, -1));
 
+        jtxtCedulaHorario.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jtxtCedulaHorario.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jPanel1.add(jtxtCedulaHorario, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 50, 176, -1));
+
+        jcbxJornada.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
         jcbxJornada.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 jcbxJornadaItemStateChanged(evt);
             }
         });
+        jPanel1.add(jcbxJornada, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 110, 176, -1));
 
-        jlblHoras.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jlblHoras.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jPanel1.add(jlblHoras, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 180, 152, 27));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap(111, Short.MAX_VALUE)
-                        .addComponent(jbtnAnadir, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jbtnCancelarHorario))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(21, 21, 21)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel6))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jlblHoras, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)
-                            .addComponent(jtxtCedulaHorario)
-                            .addComponent(jcbxJornada, 0, 97, Short.MAX_VALUE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(jtxtCedulaHorario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(jcbxJornada, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jlblHoras, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jbtnAnadir)
-                    .addComponent(jbtnCancelarHorario))
-                .addGap(26, 26, 26))
-        );
+        jspnIni.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jPanel1.add(jspnIni, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 180, 80, -1));
+
+        jspnFin.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jPanel1.add(jspnFin, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 180, 79, -1));
+
+        jLabel8.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel8.setText("-");
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 180, 10, -1));
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -401,7 +400,7 @@ public class AdminPrincipal extends javax.swing.JFrame {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 456, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
@@ -416,9 +415,12 @@ public class AdminPrincipal extends javax.swing.JFrame {
 
         jPanel5.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
+        jLabel7.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(153, 0, 0));
         jLabel7.setText("ADMINISTRACION HORARIOS - DOCENTES");
 
-        jButton1.setText("Inicio");
+        jButton1.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jButton1.setText("Volver");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -429,43 +431,41 @@ public class AdminPrincipal extends javax.swing.JFrame {
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel7)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton1)
                 .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addGap(6, 6, 6)
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(13, 13, 13)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jTabbedPane1)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(0, 8, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jTabbedPane1))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jTabbedPane1)
                 .addContainerGap())
         );
 
@@ -492,12 +492,16 @@ public class AdminPrincipal extends javax.swing.JFrame {
     private void jbtnAnadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnAnadirActionPerformed
         // TODO add your handling code here:
         registroHorario();
+        cargarSpinner(0, 0, jspnFin);
+        cargarSpinner(0, 0, jspnIni);
     }//GEN-LAST:event_jbtnAnadirActionPerformed
 
     private void jbtnCancelarHorarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnCancelarHorarioActionPerformed
         // TODO add your handling code here:
         this.jtxtCedulaHorario.setText("");
         this.jcbxJornada.setSelectedIndex(0);
+        this.jspnFin.setValue("0");
+        this.jspnIni.setValue("0");
     }//GEN-LAST:event_jbtnCancelarHorarioActionPerformed
 
     private void jcbxJornadaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jcbxJornadaItemStateChanged
@@ -549,6 +553,7 @@ public class AdminPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -562,9 +567,11 @@ public class AdminPrincipal extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> jcbxJornada;
     private javax.swing.JLabel jlblHoras;
     private javax.swing.JPasswordField jpwdContraena;
-    private javax.swing.JTextField jtxtApellido;
+    private javax.swing.JSpinner jspnFin;
+    private javax.swing.JSpinner jspnIni;
+    private admin.TxtString jtxtApellido;
     private javax.swing.JTextField jtxtCedula;
     private javax.swing.JTextField jtxtCedulaHorario;
-    private javax.swing.JTextField jtxtNombre;
+    private admin.TxtString jtxtNombre;
     // End of variables declaration//GEN-END:variables
 }
